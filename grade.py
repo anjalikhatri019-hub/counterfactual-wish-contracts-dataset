@@ -12,6 +12,19 @@ from typing import Any
 EXPECTED_COLUMNS = ["case_id", "policy_json"]
 FALLBACKS = {"ROLLBACK_ALL", "DROP_RISKY", "COMMIT_LITERAL"}
 MAX_POLICY_CHARS = 4096
+PRIVATE_ANSWER_KEYS = {
+    "profiles",
+    "world_modes",
+    "clause_semantics",
+    "question_semantics",
+    "target",
+    "budget",
+    "oracle_policy",
+    "oracle_value",
+    "wish_family",
+    "ambiguity_pair",
+    "world_tuple",
+}
 
 
 def _read_payload(source: Any) -> str:
@@ -67,6 +80,48 @@ def _validate_submission(
     if len(submitted) != len(expected_ids) or set(submitted) != set(expected_ids):
         raise ValueError("Submission must contain every test case exactly once and no extras")
     return submitted
+
+
+def _decode_private_answers(
+    columns: list[str], raw_rows: list[dict[str, str]]
+) -> list[dict[str, Any]]:
+    if columns != EXPECTED_COLUMNS:
+        raise ValueError(f"Private answer columns must be exactly {EXPECTED_COLUMNS}")
+    decoded: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for row in raw_rows:
+        case_id = row.get("case_id", "")
+        if not case_id or case_id in seen:
+            raise ValueError("Private answers must contain unique nonempty case_id values")
+        seen.add(case_id)
+        try:
+            payload = json.loads(row.get("policy_json", ""))
+        except json.JSONDecodeError as error:
+            raise ValueError("Private policy_json is malformed") from error
+        if not isinstance(payload, dict) or set(payload) != PRIVATE_ANSWER_KEYS:
+            raise ValueError("Private policy_json has an invalid evaluator envelope")
+        if (
+            not isinstance(payload["profiles"], list)
+            or not isinstance(payload["world_modes"], list)
+            or not isinstance(payload["clause_semantics"], list)
+            or not isinstance(payload["question_semantics"], list)
+            or not isinstance(payload["oracle_policy"], dict)
+            or not isinstance(payload["wish_family"], str)
+            or not isinstance(payload["ambiguity_pair"], str)
+            or not isinstance(payload["world_tuple"], str)
+        ):
+            raise ValueError("Private policy_json contains invalid evaluator types")
+        try:
+            payload["target"] = float(payload["target"])
+            payload["budget"] = int(payload["budget"])
+            payload["oracle_value"] = float(payload["oracle_value"])
+        except (TypeError, ValueError) as error:
+            raise ValueError("Private policy_json contains invalid numeric values") from error
+        payload["case_id"] = case_id
+        decoded.append(payload)
+    if not decoded:
+        raise ValueError("Private answers must not be empty")
+    return decoded
 
 
 def _clamp(value: float, low: float = 0.0, high: float = 1.0) -> float:
@@ -215,11 +270,11 @@ def _contract_quality(
     return mean_score * (0.55 + 0.20 * safety_rate) + 0.15 * worst_score + 0.10 * profile_floor
 
 
-def _row_value(policy: dict[str, Any], answer: dict[str, str]) -> float:
-    profiles = json.loads(answer["profiles_json"])
-    modes = json.loads(answer["world_modes_json"])
-    clause_rows = json.loads(answer["clause_semantics_json"])
-    questions = json.loads(answer["question_semantics_json"])
+def _row_value(policy: dict[str, Any], answer: dict[str, Any]) -> float:
+    profiles = answer["profiles"]
+    modes = answer["world_modes"]
+    clause_rows = answer["clause_semantics"]
+    questions = answer["question_semantics"]
     clauses = {row["clause_id"]: row for row in clause_rows}
     question = next(row for row in questions if row["question_id"] == policy["question_id"])
     axis = question["axis"]
@@ -227,7 +282,7 @@ def _row_value(policy: dict[str, Any], answer: dict[str, str]) -> float:
     for answer_name, branch_name in (("A", "if_A"), ("B", "if_B")):
         subset = [profile for profile in profiles if profile[axis] == question[answer_name]]
         quality = _contract_quality(
-            policy[branch_name], subset, modes, clauses, int(answer["budget"]), float(answer["target"])
+            policy[branch_name], subset, modes, clauses, answer["budget"], answer["target"]
         )
         weighted += len(subset) * quality / len(profiles)
     return max(0.0, weighted - float(question["burden"]))
@@ -248,26 +303,20 @@ def _quantile(values: list[float], q: float) -> float:
 
 def grade_frames(submission: Any, answers: Any) -> dict[str, float]:
     submission_columns, submission_rows = _rows(submission)
-    answer_columns, answer_rows = _rows(answers)
-    required_answer_columns = {
-        "case_id", "profiles_json", "world_modes_json", "clause_semantics_json",
-        "question_semantics_json", "target", "budget", "oracle_value", "wish_family",
-        "ambiguity_pair", "world_tuple",
-    }
-    if not required_answer_columns.issubset(set(answer_columns)):
-        raise ValueError("Private answers are missing required columns")
+    answer_columns, raw_answer_rows = _rows(answers)
+    answer_rows = _decode_private_answers(answer_columns, raw_answer_rows)
     submitted = _validate_submission(submission_columns, submission_rows, answer_rows)
 
     ratios: list[float] = []
     malformed = 0
     regime_scores: dict[str, list[float]] = defaultdict(list)
     for answer in answer_rows:
-        question_ids = {row["question_id"] for row in json.loads(answer["question_semantics_json"])}
-        clause_ids = {row["clause_id"] for row in json.loads(answer["clause_semantics_json"])}
+        question_ids = {row["question_id"] for row in answer["question_semantics"]}
+        clause_ids = {row["clause_id"] for row in answer["clause_semantics"]}
         try:
             policy = _validate_policy(submitted[answer["case_id"]], question_ids, clause_ids)
             value = _row_value(policy, answer)
-            oracle_value = float(answer["oracle_value"])
+            oracle_value = answer["oracle_value"]
             ratio = _clamp(value / max(oracle_value, 1e-12))
         except (ValueError, TypeError, KeyError, json.JSONDecodeError, StopIteration):
             ratio = 0.0

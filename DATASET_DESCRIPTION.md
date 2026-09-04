@@ -22,6 +22,16 @@ The raw pack contains no generated rows and no private test labels. `prepare.py`
 
 ## Prepared fields and labels
 
+`train.csv` contains 12,000 supervised rows with exactly these ordered columns:
+
+```text
+case_id,wish_text,context_text,charter_text,question_catalog_json,clause_catalog_json,contract_limits_json,policy_json,oracle_value
+```
+
+The first seven columns are predictors. `policy_json` is the exact exhaustive-oracle supervised label and uses the same contingent-contract grammar required from participants. `oracle_value` is a unitless auxiliary training diagnostic, not a submission column or a separate prediction target.
+
+`test.csv` contains 3,000 rows with exactly the seven predictor columns through `contract_limits_json`; it contains no labels. `sample_submission.csv` has exactly the ordered columns `case_id,policy_json`. The private `answers.csv` uses that same two-column header, as required by the evaluator platform. Its organizer-only `policy_json` cell is a sealed evaluator envelope holding latent replay state and the row oracle; it is decoded internally by `grade.py` and is never published. A participant `policy_json` continues to use only the public policy grammar.
+
 - `case_id` is an opaque answer-independent string identifier with no predictive or ordinal semantics.
 - `wish_text`, `context_text`, and `charter_text` are synthetic English strings.
 - `question_catalog_json` is a JSON string encoding exactly five independently permuted question objects. Every object has string fields `question_id`, `question`, `A`, and `B`, and numeric field `burden`.
@@ -29,6 +39,13 @@ The raw pack contains no generated rows and no private test labels. `prepare.py`
 - `contract_limits_json` is a JSON string encoding integer `min_clauses`, `max_clauses`, and `seal_mark_budget`.
 - Training-only `policy_json` is the exact oracle contingent-policy label. It chooses one row-local question and one answer-specific branch for A and B; each branch contains one or two row-local clause IDs and one categorical fallback.
 - Training-only `oracle_value` is the exact exhaustive oracle's raw policy value.
+
+## Split construction and anti-memorization controls
+
+- Train and test case IDs are disjoint, and no exact wish/context pair crosses the split.
+- Case, question, and clause IDs are created separately for every row from answer-independent deterministic hashes. Question and clause catalogues are independently permuted.
+- Test holds out three complete ambiguity-axis pairs, an unseen member of every wish-template family, and a different family-conditioned charter-omission rule.
+- Train row IDs and row-local catalogue mappings never reappear in test. Memorizing a training ID or label cannot produce valid test catalogue IDs; a model must ground its policy in the current row's text and candidates.
 
 ## Units and label semantics
 

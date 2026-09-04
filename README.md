@@ -23,6 +23,10 @@ Use the repository URL above as the dataset **Source URL**. Do not use the Creat
 
 The public repository contains no private test answers. Release assets provide the platform-ready raw dataset ZIP.
 
+## Prepared evaluator contract
+
+`train.csv` contains seven public input columns followed by the exact oracle `policy_json` supervised label and auxiliary unitless `oracle_value`. `test.csv` contains only the seven inputs. Both `sample_submission.csv` and the organizer-only `answers.csv` use the exact ordered header `case_id,policy_json`; private answer cells are sealed evaluator envelopes decoded only by `grade.py`. Train/test row IDs and row-local catalogue IDs are disjoint, and test additionally holds out ambiguity pairs, wish-template members, and a charter-composition rule.
+
 ## Licences
 
 Generated dataset and documentation: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

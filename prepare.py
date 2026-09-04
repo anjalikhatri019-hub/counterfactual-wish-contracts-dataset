@@ -531,6 +531,23 @@ def _baseline_policy(public_row: dict[str, Any]) -> str:
     return dumps(policy)
 
 
+def _private_answer_payload(private: dict[str, str]) -> str:
+    """Seal evaluator-only state behind the platform-required policy_json column."""
+    return dumps({
+        "profiles": json.loads(private["profiles_json"]),
+        "world_modes": json.loads(private["world_modes_json"]),
+        "clause_semantics": json.loads(private["clause_semantics_json"]),
+        "question_semantics": json.loads(private["question_semantics_json"]),
+        "target": float(private["target"]),
+        "budget": int(private["budget"]),
+        "oracle_policy": json.loads(private["oracle_policy_json"]),
+        "oracle_value": float(private["oracle_value"]),
+        "wish_family": private["wish_family"],
+        "ambiguity_pair": private["ambiguity_pair"],
+        "world_tuple": private["world_tuple"],
+    })
+
+
 def prepare_sized(
     dataset_dir: Path, public_dir: Path, private_dir: Path, train_cases: int, test_cases: int
 ) -> None:
@@ -553,7 +570,10 @@ def prepare_sized(
         for index in range(test_cases):
             public, private = _make_case(catalog, "test", index)
             test_rows.append(public)
-            answer_rows.append(private)
+            answer_rows.append({
+                "case_id": private["case_id"],
+                "policy_json": _private_answer_payload(private),
+            })
 
         input_columns = [
             "case_id", "wish_text", "context_text", "charter_text", "question_catalog_json",
@@ -566,12 +586,10 @@ def prepare_sized(
             ["case_id", "policy_json"],
             [{"case_id": row["case_id"], "policy_json": _baseline_policy(row)} for row in test_rows],
         )
-        answer_columns = [
-            "case_id", "profiles_json", "world_modes_json", "clause_semantics_json",
-            "question_semantics_json", "target", "budget", "oracle_policy_json", "oracle_value",
-            "wish_family", "ambiguity_pair", "world_tuple",
-        ]
-        _write_csv(private_dir / "answers.csv", answer_columns, answer_rows)
+        # ShipD requires answers.csv and sample_submission.csv to expose the
+        # exact same columns in the exact same order. Evaluator-only state is
+        # encoded inside the private policy_json cell and never copied public.
+        _write_csv(private_dir / "answers.csv", ["case_id", "policy_json"], answer_rows)
         (public_dir / "policy_schema.json").write_text(
             dumps({
                 "exact_top_level_keys": ["question_id", "if_A", "if_B"],
