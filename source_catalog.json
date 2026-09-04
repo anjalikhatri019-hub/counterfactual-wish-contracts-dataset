@@ -1,0 +1,123 @@
+{
+  "catalog_version": "1.0.0",
+  "wish_families": [
+    {
+      "family": "abundance",
+      "metric": "resources",
+      "templates": [
+        "I wish {subject} would never have to worry about having enough again.",
+        "Please make sure {subject} always has the means to live well.",
+        "My wish is for {subject} to be free from scarcity.",
+        "Let {subject} finally have everything needed for a secure life."
+      ]
+    },
+    {
+      "family": "restoration",
+      "metric": "wellbeing",
+      "templates": [
+        "I wish {subject} could be made whole again.",
+        "Please restore what {subject} has lost.",
+        "My wish is that {subject} can flourish as before.",
+        "Return {subject} to a sound and thriving state."
+      ]
+    },
+    {
+      "family": "recognition",
+      "metric": "standing",
+      "templates": [
+        "I wish {subject} would finally receive the recognition deserved.",
+        "Let everyone see the value in {subject}.",
+        "My wish is for {subject} to earn lasting respect.",
+        "Please raise the standing of {subject} in the eyes of others."
+      ]
+    },
+    {
+      "family": "freedom",
+      "metric": "autonomy",
+      "templates": [
+        "I wish {subject} could live without being controlled.",
+        "Please give {subject} the freedom to choose a path.",
+        "My wish is that no one can dictate the future of {subject}.",
+        "Let {subject} become truly self-directed."
+      ]
+    },
+    {
+      "family": "knowledge",
+      "metric": "insight",
+      "templates": [
+        "I wish {subject} could understand what has remained hidden.",
+        "Please grant {subject} the insight needed to see the truth.",
+        "My wish is for {subject} to know what matters most.",
+        "Let the missing understanding become clear to {subject}."
+      ]
+    },
+    {
+      "family": "belonging",
+      "metric": "connection",
+      "templates": [
+        "I wish {subject} would never feel alone again.",
+        "Please give {subject} a real sense of belonging.",
+        "My wish is for {subject} to have enduring connection.",
+        "Let {subject} become part of a community that truly cares."
+      ]
+    },
+    {
+      "family": "peace",
+      "metric": "stability",
+      "templates": [
+        "I wish {subject} could finally live in peace.",
+        "Please bring lasting calm to {subject}.",
+        "My wish is for conflict around {subject} to end.",
+        "Let {subject} enjoy a stable future without turmoil."
+      ]
+    },
+    {
+      "family": "legacy",
+      "metric": "continuity",
+      "templates": [
+        "I wish the work of {subject} would endure.",
+        "Please ensure what {subject} built is not forgotten.",
+        "My wish is for the contribution of {subject} to survive the years.",
+        "Let the legacy of {subject} continue to benefit others."
+      ]
+    }
+  ],
+  "subjects": [
+    "me", "my household", "our neighbourhood", "the people I care about",
+    "our workshop", "our village", "my closest friend", "the next generation"
+  ],
+  "context_openers": [
+    "Before the wish is sealed, remember this:",
+    "The earlier conversation established that",
+    "The requester has been consistent on one point:",
+    "The following preference is already settled:",
+    "A reliable note from the prior discussion says"
+  ],
+  "clause_verbs": {
+    "abundance": ["establish a reserve", "open a stream of provision", "secure a store of means", "bind a resource grant"],
+    "restoration": ["restore capacity", "repair the loss", "renew the damaged state", "bind a restorative grant"],
+    "recognition": ["raise public standing", "establish acknowledged merit", "amplify earned regard", "bind a recognition grant"],
+    "freedom": ["release constraints", "establish independent choice", "remove controlling claims", "bind an autonomy grant"],
+    "knowledge": ["reveal the missing pattern", "establish clear understanding", "open a source of insight", "bind a knowledge grant"],
+    "belonging": ["form dependable ties", "establish mutual connection", "open a place of belonging", "bind a community grant"],
+    "peace": ["stabilize the surrounding order", "quiet the active conflict", "establish a calm settlement", "bind a peace grant"],
+    "legacy": ["preserve the contribution", "establish durable continuity", "carry the work forward", "bind a legacy grant"]
+  },
+  "magnitude_phrases": {
+    "1": ["a measured", "a modest", "a bounded"],
+    "2": ["a substantial", "a strong", "a generous"],
+    "3": ["an exceptional", "a sweeping", "a maximal"]
+  },
+  "externality_phrases": {
+    "0": ["with no expected burden on bystanders", "without displacing anyone else's welfare"],
+    "1": ["with a slight diffuse strain elsewhere", "while imposing a small external burden"],
+    "2": ["while causing a material loss outside the beneficiary", "with a noticeable cost borne by others"],
+    "3": ["by imposing a severe external loss", "while shifting a heavy burden to bystanders"]
+  },
+  "world_charters": {
+    "LITERAL": "Literal seal: stated clause properties are applied at face value.",
+    "CONSERVATION": "Conservation seal: created gains are weakened; transferred gains stay strong but their external burden rises.",
+    "ECHO": "Echo seal: sweeping grants amplify every external burden they carry.",
+    "FRAGILE": "Fragile seal: temporary grants are strong at first, while permanent grants lose some force but resist reversal."
+  }
+}

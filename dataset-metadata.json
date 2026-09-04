@@ -1,0 +1,12 @@
+{
+  "title": "Counterfactual Wish Contracts - Original Wish Intent and Contingent Policy Dataset",
+  "challenge_title": "Counterfactual Wish Contracts",
+  "source_type": "original_synthetic_dataset",
+  "canonical_source_url": "https://github.com/anjalikhatri019-hub/counterfactual-wish-contracts-dataset",
+  "data_license": "CC-BY-4.0",
+  "code_license": "MIT",
+  "generator_seed": 260904,
+  "train_rows": 12000,
+  "test_rows": 3000,
+  "contains_private_test_answers": false
+}

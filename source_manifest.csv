@@ -1,0 +1,5 @@
+asset,origin,creator,license,source_url,notes
+source_catalog.json,Original challenge data,Codex-assisted original work commissioned by the challenge creator,CC-BY-4.0,https://github.com/anjalikhatri019-hub/counterfactual-wish-contracts-dataset/blob/main/source_catalog.json,No rows or labels copied from external datasets
+DATASET_DESCRIPTION.md,Original dataset documentation,Challenge creator,CC-BY-4.0,https://github.com/anjalikhatri019-hub/counterfactual-wish-contracts-dataset/blob/main/DATASET_DESCRIPTION.md,Documents prepared fields units label semantics limitations biases and generalizability
+prepare.py,Original simulator and generator,Challenge creator,MIT,https://github.com/anjalikhatri019-hub/counterfactual-wish-contracts-dataset/blob/main/prepare.py,Deterministic dataset preparation code
+grade.py,Original exact evaluator,Challenge creator,MIT,https://github.com/anjalikhatri019-hub/counterfactual-wish-contracts-dataset/blob/main/grade.py,Exact deterministic evaluator
