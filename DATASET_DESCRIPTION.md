@@ -4,6 +4,12 @@
 
 This raw pack is the original human-authored semantic source for the Counterfactual Wish Contracts benchmark. It is not copied or adapted from another dataset. Generated data and documentation are CC BY 4.0; preparation and grading code distributed separately are MIT.
 
+## Canonical source URL
+
+https://github.com/anjalikhatri019-hub/counterfactual-wish-contracts-dataset
+
+The public repository identifies this dataset by its exact title and contains the matching `source_catalog.json`, dataset metadata, documentation, licences, and deterministic preparation code. The Creative Commons and SPDX pages identify the licence but are not dataset source URLs.
+
 The raw ZIP contains exactly:
 
 - `source_catalog.json`: UTF-8 JSON containing original wish families, paraphrase templates, charter modes, preference-axis wording, clause wording, simulator constants, and fallback names.
