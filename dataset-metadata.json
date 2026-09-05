@@ -1,7 +1,7 @@
 {
   "title": "Counterfactual Wish Contracts - Original Wish Intent and Contingent Policy Dataset",
   "challenge_title": "Counterfactual Wish Contracts",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "source_type": "original_synthetic_dataset",
   "canonical_source_url": "https://github.com/anjalikhatri019-hub/counterfactual-wish-contracts-dataset",
   "data_license": "CC-BY-4.0",
@@ -9,5 +9,11 @@
   "generator_seed": 260904,
   "train_rows": 12000,
   "test_rows": 3000,
+  "semantic_axes": 6,
+  "unresolved_axes_per_case": 3,
+  "compatible_profiles_per_case": 8,
+  "disclosed_worlds_per_case": 4,
+  "available_world_modes": 5,
+  "held_out_test_ambiguity_triples": 5,
   "contains_private_test_answers": false
 }

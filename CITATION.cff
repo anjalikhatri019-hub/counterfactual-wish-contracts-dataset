@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this dataset, cite the canonical source repository."
 title: "Counterfactual Wish Contracts - Original Wish Intent and Contingent Policy Dataset"
 type: dataset
-version: 1.1.0
+version: 2.0.0
 date-released: 2026-09-05
 license: CC-BY-4.0
 repository-code: "https://github.com/anjalikhatri019-hub/counterfactual-wish-contracts-dataset"

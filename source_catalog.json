@@ -1,5 +1,5 @@
 {
-  "catalog_version": "1.0.0",
+  "catalog_version": "2.0.0",
   "wish_families": [
     {
       "family": "abundance",
@@ -118,6 +118,42 @@
     "LITERAL": "Literal seal: stated clause properties are applied at face value.",
     "CONSERVATION": "Conservation seal: created gains are weakened; transferred gains stay strong but their external burden rises.",
     "ECHO": "Echo seal: sweeping grants amplify every external burden they carry.",
-    "FRAGILE": "Fragile seal: temporary grants are strong at first, while permanent grants lose some force but resist reversal."
+    "FRAGILE": "Fragile seal: temporary grants are strong at first, while permanent grants lose some force but resist reversal.",
+    "CONSENT": "Consent seal: choice-preserving grants strengthen, while directive grants weaken and add an external burden."
+  },
+  "simulator_contract": {
+    "base_gain_per_magnitude": 18.0,
+    "semantic_match_factor": 1.0,
+    "semantic_mismatch_factor": 0.46,
+    "two_clause_gain_factor": 0.7,
+    "fallback_strength": {
+      "ROLLBACK_ALL": 1.0,
+      "DROP_RISKY": 0.7,
+      "COMMIT_LITERAL": 1.1
+    },
+    "literal_commit_harm_per_clause": 0.8,
+    "harm_rate": {
+      "PROTECT": 0.09,
+      "TRADEOFF": 0.035
+    },
+    "hard_violation_penalty": 0.24,
+    "persistence_mismatch_penalty": 0.045,
+    "agency_mismatch_penalty": 0.04,
+    "executed_over_budget_penalty": 0.18,
+    "safe_harm_limit": {
+      "PROTECT": 1.5,
+      "TRADEOFF": 5.0
+    },
+    "branch_weights": {
+      "mean_base": 0.45,
+      "safe_fraction_interaction": 0.2,
+      "worst_replay": 0.2,
+      "worst_profile_mean": 0.15
+    },
+    "leaderboard_weights": {
+      "mean": 0.55,
+      "lower_decile": 0.25,
+      "worst_joint_regime": 0.2
+    }
   }
 }
