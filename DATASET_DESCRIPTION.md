@@ -13,7 +13,7 @@ The public repository identifies this dataset by its exact title and contains th
 The raw ZIP contains exactly:
 
 - `source_catalog.json`: UTF-8 JSON containing original wish families, paraphrase templates, charter modes, preference-axis wording, clause wording, simulator constants, and fallback names.
-- `source_manifest.csv`: UTF-8 CSV provenance and licence inventory.
+- `source_manifest.csv`: UTF-8 CSV per-asset provenance and canonical source links. Its ordered fields are `asset`, `origin`, `creator`, `source_url`, and `notes`; every field varies across its four records. The dataset-wide licence is intentionally defined once in `LICENSE_DATA.md` rather than repeated as a constant tabular column.
 - `LICENSE_DATA.md`: dataset and documentation licence.
 - `DATASET_DESCRIPTION.md`: this dataset card.
 - `README.md`: preparation note and concise semantic warning.
@@ -72,7 +72,7 @@ The first seven columns are predictors. `policy_json` is the sole supervised lab
 - The intent model has exactly six binary axes, exactly three unresolved axes, and eight compatible profiles per case. It does not cover continuous, correlated, changing, multi-party, or open-ended preferences.
 - Each case provides six binary questions and twelve fixed-format clause candidates. A policy asks one question and chooses a one- or two-clause branch, leaving four compatible profiles in either answer branch. Free-form question generation, repeated questioning, negotiation, open-vocabulary contracts, and plans outside this grammar are not measured.
 - The evaluator embeds specific normative simulator choices about safety, satisfaction, worst cases, question cost, externality, clause strength, fallback behaviour, and asymmetric hard boundaries. In particular, focal-only, seasonal, created-only, reversible, protective, and consensual requirements reject their permissive opposites; the reverse pairing is allowed but can realize less gain. The oracle is optimal only for those rules and is not a claim about correct real-world values.
-- Oracle question, fallback, and contract-size distributions are not forced to be uniform, so models can exploit majority tendencies despite the lower-tail and worst-regime terms. Final v9 distributions are documented after the full build.
+- Oracle question, fallback, and contract-size distributions are not forced to be uniform, so models can exploit majority tendencies despite the lower-tail and worst-regime terms. Final v10 distributions are unchanged from the audited v9 data-generation build and are documented separately.
 - Held-out ambiguity triples, wish/context/question paraphrases, and charter composition test specified compositional shifts, not arbitrary open-world generalization. Primitive axis, clause, and charter families remain semantically related to training support.
 - The dataset contains no real personal or sensitive attributes. This limits privacy risk but prevents meaningful demographic-fairness or disparate-impact evaluation.
 - Deterministic templating may leave surface regularities despite independent ID and catalogue permutation. Surface performance should be reported as a shortcut diagnostic.

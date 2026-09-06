@@ -13,12 +13,14 @@ Use the repository URL above as the dataset **Source URL**. Do not use the Creat
 ## Contents
 
 - `source_catalog.json`: original semantic source catalogue.
-- `source_manifest.csv`: provenance, licence, and canonical source URL inventory.
+- `source_manifest.csv`: per-asset provenance and canonical source-link inventory. Dataset-wide licensing is defined once in `LICENSE_DATA.md`, avoiding a redundant constant CSV column.
 - `DATASET_DESCRIPTION.md`: fields, units, label semantics, limitations, biases, and generalizability.
 - `LICENSE_DATA.md`: CC BY 4.0 data and documentation licence.
 - `dataset-metadata.json`: machine-readable dataset identity.
 
 The public repository contains no private test answers, evaluator, or private-oracle generator. Those components are restricted to the challenge organizer. Release assets provide the platform-ready raw dataset ZIP.
+
+Version 2.1.0 removes the redundant constant `license` field from `source_manifest.csv`. The pack-wide CC BY 4.0 licence remains authoritative in `LICENSE_DATA.md`; no generated examples, labels, splits, simulator rules, or evaluation behavior changed.
 
 ## Prepared evaluator contract
 
